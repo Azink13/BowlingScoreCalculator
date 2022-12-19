@@ -22,8 +22,6 @@ export class GameComponent implements OnInit {
     runningTotal: 0,
   }
   constructor() {
-
-
   }
 
   ngOnInit(): void {
@@ -77,7 +75,7 @@ export class GameComponent implements OnInit {
   finalFrame(pinsHit: number): void {
     var extraThrow = false;
     if (pinsHit === 10) {
-      if (this.game.throwNumber >= 2 && this.game.throwHistory[this.game.throwHistory.length - 1] === 0) {
+      if (this.game.throwNumber >= 2 && this.game.throwHistory[this.game.throwHistory.length - 2] === 0) {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push("/");
         this.game.bonus[this.game.frame as keyof { 1: string }] = 'Spare';
       }
@@ -115,6 +113,7 @@ export class GameComponent implements OnInit {
     else {
 
       if (!extraThrow && (this.game.throwNumber >= 2)) {
+        this.game.frameScore[this.game.frame as keyof { 1: [] }].push(pinsHit);
         this.endGame(extraThrow);
       }
       else {
@@ -126,8 +125,9 @@ export class GameComponent implements OnInit {
 
   endGame(thirdThrow: boolean): void {
     this.game.gameover = true;
-    this.calculateFrameScore();
-    console.log("GAMe over")
+    this,
+    this.calculateFrameScore(thirdThrow);
+    console.log("Game over")
 
   }
 
@@ -147,7 +147,7 @@ export class GameComponent implements OnInit {
 
   // Next Frame Group
   nextFrame(): void {
-    this.calculateFrameScore();
+    this.calculateFrameScore(false);
     this.rollReset();
     this.game.frame++;
     if (this.game.frame > 10) {
@@ -162,9 +162,9 @@ export class GameComponent implements OnInit {
     this.game.pinCount = 10;
   };
 
-  calculateFrameScore(): void {
+  calculateFrameScore(thirdThrow: boolean): void {
     var boxscore = 0;
-    if (this.game.gameover) {
+    if (thirdThrow) {
       boxscore += this.game.throwHistory[this.game.throwHistory.length - 3];
       boxscore += this.game.throwHistory[this.game.throwHistory.length - 2];
       boxscore += this.game.throwHistory[this.game.throwHistory.length - 1];
