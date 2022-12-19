@@ -77,7 +77,7 @@ export class GameComponent implements OnInit {
   finalFrame(pinsHit: number): void {
     var extraThrow = false;
     if (pinsHit === 10) {
-      if (this.game.throwNumber >= 2 && this.game.throwHistory[this.game.throwHistory.length-1] === 0) {
+      if (this.game.throwNumber >= 2 && this.game.throwHistory[this.game.throwHistory.length - 1] === 0) {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push("/");
         this.game.bonus[this.game.frame as keyof { 1: string }] = 'Spare';
       }
@@ -93,11 +93,11 @@ export class GameComponent implements OnInit {
 
       //game over check
       if (this.game.throwNumber === 4) {
-        this.gameOver(extraThrow);
+        this.endGame(extraThrow);
       }
       return;
     }
-    else if (((pinsHit + this.game.throwHistory[this.game.throwHistory.length-2]) === 10) && this.game.throwNumber > 1 ) {
+    else if (((pinsHit + this.game.throwHistory[this.game.throwHistory.length - 2]) === 10) && this.game.throwNumber > 1) {
       this.game.frameScore[this.game.frame as keyof { 1: [] }].push("/");
       this.game.bonus[this.game.frame as keyof { 1: string }] = 'Spare';
 
@@ -108,14 +108,14 @@ export class GameComponent implements OnInit {
 
       //game over check
       if (this.game.throwNumber === 4) {
-        this.gameOver(extraThrow);
+        this.endGame(extraThrow);
       }
       return;
     }
     else {
 
       if (!extraThrow && (this.game.throwNumber >= 2)) {
-        this.gameOver(extraThrow);
+        this.endGame(extraThrow);
       }
       else {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push(pinsHit);
@@ -124,9 +124,10 @@ export class GameComponent implements OnInit {
     }
   };
 
-  gameOver(thirdThrow: boolean): void {
-    this.calculateFrameScore(thirdThrow);
+  endGame(thirdThrow: boolean): void {
     this.game.gameover = true;
+    this.calculateFrameScore();
+    console.log("GAMe over")
 
   }
 
@@ -146,7 +147,7 @@ export class GameComponent implements OnInit {
 
   // Next Frame Group
   nextFrame(): void {
-    this.calculateFrameScore(false);
+    this.calculateFrameScore();
     this.rollReset();
     this.game.frame++;
     if (this.game.frame > 10) {
@@ -161,13 +162,25 @@ export class GameComponent implements OnInit {
     this.game.pinCount = 10;
   };
 
-  calculateFrameScore(thirdThrow: boolean): void {
-      var throw1 = this.game.throwHistory[this.game.throwHistory.length - 2]
-      var throw2 = this.game.throwHistory[this.game.throwHistory.length - 1]
-      var boxscore = throw1 + throw2;
-
-    if (thirdThrow == true) {
-      boxscore += this.game.throwHistory[this.game.throwHistory.length -3];
+  calculateFrameScore(): void {
+    var boxscore = 0;
+    if (this.game.gameover) {
+      boxscore += this.game.throwHistory[this.game.throwHistory.length - 3];
+      boxscore += this.game.throwHistory[this.game.throwHistory.length - 2];
+      boxscore += this.game.throwHistory[this.game.throwHistory.length - 1];
+    }
+    if (this.game.frame <= 2 && this.game.frameScore[1].includes("X")){
+      return;
+    }
+    else {
+      var throw1 = this.game.throwHistory[this.game.throwHistory.length - 1];
+      var throw2 = this.game.throwHistory[this.game.throwHistory.length - 2];
+      if (throw1 === 10){
+        boxscore = 10
+      }
+      else{
+        boxscore = throw1 + throw2;
+      }
     }
     var bonus = this.calculateBonus();
 
@@ -177,10 +190,65 @@ export class GameComponent implements OnInit {
   };
 
   calculateBonus(): number {
-    if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Strike') {
-      return this.game.throwHistory[this.game.throwHistory.length - 1] += this.game.throwHistory[this.game.throwHistory.length - 2];
-    } else if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Spare') {
-      return this.game.throwHistory[this.game.throwHistory.length - 2];
+    if (this.game.frame === 1) {
+      return 0;
+    }
+    var bonus = 0;
+    if (this.game.gameover) {
+      bonus += this.calculateFinalBonus();
+      bonus += this.calculateFinalFrameBonus();
+      return bonus;
+    }
+
+    if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Spare') {
+      bonus = this.game.frameScore[this.game.frame as keyof { 1: [] }].slice(0,1)[0];
+      if (bonus.toString() === "X"){
+        bonus = 10
+      }
+      return bonus;
+    }
+    else if (this.game.bonus[(this.game.frame - 2 ) as keyof { 1: string }] === 'Strike') {
+      if (this.game.bonus[(this.game.frame - 1 ) as keyof { 1: string }] != 'Strike'){
+        bonus = this.game.throwHistory[this.game.throwHistory.length - 3] + this.game.throwHistory[this.game.throwHistory.length - 4];
+      return bonus;
+      }
+      bonus = this.game.throwHistory[this.game.throwHistory.length - 1] + this.game.throwHistory[this.game.throwHistory.length - 2];
+      return bonus;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  calculateFinalBonus(): number {
+    var bonus = 0;
+    if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Spare') {
+      bonus =this.game.throwHistory[this.game.throwHistory.length - 3];
+      if (bonus.toString() === "X"){
+        bonus = 10
+      }
+      return bonus;
+    }
+    else if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Strike') {
+      bonus = this.game.throwHistory[this.game.throwHistory.length - 2] += this.game.throwHistory[this.game.throwHistory.length - 3] + 10; //Plus 10 to account for 9th strike
+      if (bonus.toString() === "X"){
+        bonus = 10
+      }
+      return bonus;
+    } 
+    else {
+      return 0;
+    }
+  }
+
+  calculateFinalFrameBonus(): number {
+    var bonus = 0;
+    if (this.game.bonus[(this.game.frame) as keyof { 1: string }] === 'Spare') {
+       return this.game.throwHistory[this.game.throwHistory.length - 1];
+    }
+    else if (this.game.bonus[(this.game.frame) as keyof { 1: string }] === 'Strike') {
+      //Plus 10 to Count the last strikes
+      return this.game.throwHistory[this.game.throwHistory.length - 2] += this.game.throwHistory[this.game.throwHistory.length - 3] +10;
     }
     else {
       return 0;
