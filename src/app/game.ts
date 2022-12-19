@@ -3,6 +3,8 @@ export interface game {
     throw: number;
     pinCount: number;
     gameOver: boolean;
-    score:
+    totalScore: number;
+    frameScore: [index:number];
+
 
 }
