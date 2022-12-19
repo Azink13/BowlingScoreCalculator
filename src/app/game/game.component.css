@@ -1,0 +1,76 @@
+
+  .content {
+    display: flex;
+    margin: 82px auto 32px;
+    padding: 0 16px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .scoresheet{
+    margin: 0 auto; 
+    width:80%; 
+    font-size:12px; 
+    border:1px solid; 
+    text-align: z; 
+    table-layout: fixed; 
+  }
+
+  .scoresheet th, tr, td {
+    padding: 0;
+    vertical-align: middle; 
+    font-family: Arial, Helvetica, sans-serif; 
+    font-weight: bold;
+  }
+  .scoresheet th {
+    border-bottom:1px solid; 
+    border-color: black;
+    color: white;
+    background-color:#1976d2; 
+    height:30px;
+  }
+
+  .scoresheet th:not(:last-child) {
+    border-right:1px solid;
+    border-color: black;
+  }
+
+  .scoresheet td {
+    height:30px; 
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .scoresheet tr td:not(:last-child) {
+    border-right:1px solid;
+  }
+
+  .scoresheet tr:nth-child(2) td:nth-child(even) {
+    border-bottom:1px solid;
+  }
+
+  .scoresheet tr:nth-child(2) td:last-child {
+    border-bottom:1px solid;
+  }
+
+  .buttons{
+  text-align: center;
+  }
+
+  .buttons button
+  {
+    padding: 10px;
+    background-color: #1976d2;
+    color: white;
+    display: inline-block;
+    border-width: 1.5px;
+    border-radius: 4px;
+    transition-duration: 0.2s;
+    margin: 10px;
+    min-width: 3em;
+  }
+
+  .buttons button:hover {
+  background-color: #7cb7f1; /* Green */
+  color: white;
+}
