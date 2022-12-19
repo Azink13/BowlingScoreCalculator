@@ -3,78 +3,12 @@
 <div class="toolbar" role="banner">
   <img
     width="40"
-    alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
+    alt="Bowling"
+    src="assets/images/BowlingBall.png"
   />
   <span>Bowling Score Calculator</span>
 </div>
 
-<div class="content" role="main">
-  <!-- Table -->
-  <h1>Score Sheet</h1>
+<app-game></app-game>
 
-  <div id='scoresheet'>
-    <table id='scoresheetTable' class='scoresheet' cellpadding='1' cellspacing='0'>
-      <tr>
-        <th colspan='6'>Frame 1</th>
-        <th colspan='6'>Frame 2</th>
-        <th colspan='6'>Frame 3</th>
-        <th colspan='6'>Frame 4</th>
-        <th colspan='6'>Frame 5</th>
-        <th colspan='6'>Frame 6</th>
-        <th colspan='6'>Frame 7</th>
-        <th colspan='6'>Frame 8</th>
-        <th colspan='6'>Frame 9</th>
-        <th colspan='6'>Frame 10</th>
-      </tr>
-      <tr>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='3'></td><td colspan='3'></td>
-        <td colspan='2'></td><td colspan='2'></td><td colspan='2'></td>
-      </tr>
-      <tr>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-        <td colspan='6'></td>
-      </tr>
-    </table>
-  </div>
-</div>
 
-<div class="buttons">
-  <button type="button" onclick="pinHit(0)"  class="btn btn-primary">Gutter</button>
-    <button type="button" onclick="pinHit(1)"  class="btn btn-primary">1</button>
-    <button type="button" onclick="pinHit(2)"  class="btn btn-primary">2</button>
-    <button type="button" onclick="pinHit(3)"  class="btn btn-primary">3</button>
-    <button type="button" onclick="pinHit(4)"  class="btn btn-primary">4</button>
-    <button type="button" onclick="pinHit(5)"  class="btn btn-primary">5</button>
-    <button type="button" onclick="pinHit(6)"  class="btn btn-primary">6</button>
-    <button type="button" onclick="pinHit(7)"  class="btn btn-primary">7</button>
-    <button type="button" onclick="pinHit(8)"  class="btn btn-primary">8</button>
-    <button type="button" onclick="pinHit(9)"  class="btn btn-primary">9</button>
-    <button type="button" onclick="pinHit(10)"  class="btn btn-primary">10</button>
-</div>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<router-outlet></router-outlet>
