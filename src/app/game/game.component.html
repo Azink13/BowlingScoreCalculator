@@ -56,15 +56,15 @@
 
 
 <div class="buttons">
-    <button type="button" (click)="scoreShot(0)" class="btn btn-primary">Gutter</button>
-    <button type="button" (click)="scoreShot(1)" class="btn btn-primary">1</button>
-    <button type="button" (click)="scoreShot(2)" class="btn btn-primary">2</button>
-    <button type="button" (click)="scoreShot(3)" class="btn btn-primary">3</button>
-    <button type="button" (click)="scoreShot(4)" class="btn btn-primary">4</button>
-    <button type="button" (click)="scoreShot(5)" class="btn btn-primary">5</button>
-    <button type="button" (click)="scoreShot(6)" class="btn btn-primary">6</button>
-    <button type="button" (click)="scoreShot(7)" class="btn btn-primary">7</button>
-    <button type="button" (click)="scoreShot(8)" class="btn btn-primary">8</button>
-    <button type="button" (click)="scoreShot(9)" class="btn btn-primary">9</button>
-    <button type="button" (click)="scoreShot(10)" class="btn btn-primary">10</button>
+    <button type="button" [disabled]="(0 > this.game.pinCount)" (click)="scoreShot(0)" class="btn btn-primary">Gutter</button>
+    <button type="button" [disabled]="(1 > this.game.pinCount)" (click)="scoreShot(1)" class="btn btn-primary">1</button>
+    <button type="button" [disabled]="(2 > this.game.pinCount)" (click)="scoreShot(2)" class="btn btn-primary">2</button>
+    <button type="button" [disabled]="(3 > this.game.pinCount)" (click)="scoreShot(3)" class="btn btn-primary">3</button>
+    <button type="button" [disabled]="(4 > this.game.pinCount)" (click)="scoreShot(4)" class="btn btn-primary">4</button>
+    <button type="button" [disabled]="(5 > this.game.pinCount)" (click)="scoreShot(5)" class="btn btn-primary">5</button>
+    <button type="button" [disabled]="(6 > this.game.pinCount)"(click)="scoreShot(6)" class="btn btn-primary">6</button>
+    <button type="button" [disabled]="(7 > this.game.pinCount)"(click)="scoreShot(7)" class="btn btn-primary">7</button>
+    <button type="button" [disabled]="(8 > this.game.pinCount)" (click)="scoreShot(8)" class="btn btn-primary">8</button>
+    <button type="button" [disabled]="(9 > this.game.pinCount)" (click)="scoreShot(9)" class="btn btn-primary">9</button>
+    <button type="button" [disabled]="(10 > this.game.pinCount)" (click)="scoreShot(10)" class="btn btn-primary">10</button>
 </div>

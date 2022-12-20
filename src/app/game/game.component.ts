@@ -34,9 +34,7 @@ export class GameComponent implements OnInit {
     if (this.isRollValid(pinsHit) === false) {
       return;
     }
-    console.log(this.game)
     this.roll(pinsHit);
-    console.log(this.game)
   }
 
   roll(pinsHit: number): void {
@@ -256,6 +254,7 @@ export class GameComponent implements OnInit {
     }
   }
 
+  //
   calculateFinalFrameBonus(): number {
     var bonus = 0;
     if (this.game.bonus[(this.game.frame) as keyof { 1: string }] === 'Spare') {
