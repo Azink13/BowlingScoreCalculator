@@ -15,11 +15,12 @@ export class GameComponent implements OnInit {
     frame: 1,
     frameScore: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [] },
     gameover: false,
-    pinCount: 10,  
+    pinCount: 10,
     throwHistory: [],
     runningScore: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: '' },
     runningTotal: 0,
     throwNumber: 1,
+    finalFrame: 0,
   }
   constructor() {
   }
@@ -77,36 +78,42 @@ export class GameComponent implements OnInit {
     if (pinsHit === 10) {
       if (this.game.throwNumber >= 2 && this.game.throwHistory[this.game.throwHistory.length - 2] === 0) {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push("/");
-        this.game.bonus[this.game.frame as keyof { 1: string }] = 'Spare';
+        this.game.finalFrame += 10
+        return
       }
       else {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push("X");
-        this.game.bonus[this.game.frame as keyof { 1: string }] = 'Strike';
+        this.game.finalFrame += 10
       }
 
       extraThrow = true;
       //Setup Throw
-      this.game.throwNumber++;
-      this.game.pinCount = 10;
-
-      //game over check
-      if (this.game.throwNumber === 4) {
+      if (this.game.throwNumber === 3) {
         this.endGame(extraThrow);
+      }
+      else {
+        this.game.throwNumber++;
+        this.game.pinCount = 10;
       }
       return;
     }
     else if (((pinsHit + this.game.throwHistory[this.game.throwHistory.length - 2]) === 10) && this.game.throwNumber > 1) {
-      this.game.frameScore[this.game.frame as keyof { 1: [] }].push("/");
-      this.game.bonus[this.game.frame as keyof { 1: string }] = 'Spare';
+      if (pinsHit > 0) {
+        this.game.frameScore[this.game.frame as keyof { 1: [] }].push("/");
+      }
+      else {
+        this.game.frameScore[this.game.frame as keyof { 1: [] }].push(pinsHit);
+      }
+      this.game.finalFrame += pinsHit;
 
       extraThrow = true;
       //Setup Throw
-      this.game.throwNumber++;
-      this.game.pinCount = 10;
-
-      //game over check
-      if (this.game.throwNumber === 4) {
+      if (this.game.throwNumber === 3) {
         this.endGame(extraThrow);
+      }
+      else {
+        this.game.throwNumber++;
+        this.game.pinCount = 10;
       }
       return;
     }
@@ -114,10 +121,12 @@ export class GameComponent implements OnInit {
 
       if (!extraThrow && (this.game.throwNumber >= 2)) {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push(pinsHit);
+        this.game.finalFrame += pinsHit;
         this.endGame(extraThrow);
       }
       else {
         this.game.frameScore[this.game.frame as keyof { 1: [] }].push(pinsHit);
+        this.game.finalFrame += pinsHit;
         this.setupThrow(pinsHit);
       }
     }
@@ -125,8 +134,7 @@ export class GameComponent implements OnInit {
 
   endGame(thirdThrow: boolean): void {
     this.game.gameover = true;
-    this,
-      this.calculateFrameScore(thirdThrow);
+    this.calculateFrameScore(thirdThrow);
     console.log("Game over")
   }
 
@@ -163,10 +171,15 @@ export class GameComponent implements OnInit {
 
   calculateFrameScore(thirdThrow: boolean): void {
     var boxscore = 0;
-    if (thirdThrow) {
-      boxscore += this.game.throwHistory[this.game.throwHistory.length - 3];
-      boxscore += this.game.throwHistory[this.game.throwHistory.length - 2];
-      boxscore += this.game.throwHistory[this.game.throwHistory.length - 1];
+    var bonus = 0;
+    if (this.game.gameover) {
+      boxscore = this.game.finalFrame;
+
+      bonus = this.calculateFinalBonus();
+
+      this.game.runningTotal += (boxscore + bonus);
+      this.game.runningScore[this.game.frame as keyof { 1: [] }] = this.game.runningTotal.toString();
+      return;
     }
     if (this.game.frame <= 2 && this.game.frameScore[1].includes("X")) {
       return;
@@ -181,7 +194,7 @@ export class GameComponent implements OnInit {
         boxscore = throw1 + throw2;
       }
     }
-    var bonus = this.calculateBonus();
+    bonus = this.calculateBonus();
 
     this.game.runningTotal += (boxscore + bonus);
     this.game.runningScore[this.game.frame as keyof { 1: [] }] = this.game.runningTotal.toString();
@@ -222,16 +235,19 @@ export class GameComponent implements OnInit {
   calculateFinalBonus(): number {
     var bonus = 0;
     if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Spare') {
-      bonus = this.game.throwHistory[this.game.throwHistory.length - 3];
+      bonus = this.game.frameScore[this.game.frame as keyof { 1: [] }].slice(0, 1)[0];
       if (bonus.toString() === "X") {
         bonus = 10
       }
       return bonus;
     }
     else if (this.game.bonus[(this.game.frame - 1) as keyof { 1: string }] === 'Strike') {
-      bonus = this.game.throwHistory[this.game.throwHistory.length - 2] += this.game.throwHistory[this.game.throwHistory.length - 3] + 10; //Plus 10 to account for 9th strike
+      bonus = this.game.frameScore[this.game.frame as keyof { 1: [] }].slice(0, 2)[0] + this.game.frameScore[this.game.frame as keyof { 1: [] }].slice(0, 2)[1];
       if (bonus.toString() === "X") {
         bonus = 10
+      }
+      if (bonus.toString() === "XX") {
+        bonus = 20
       }
       return bonus;
     }
