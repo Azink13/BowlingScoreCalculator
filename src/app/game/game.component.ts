@@ -133,6 +133,7 @@ export class GameComponent implements OnInit {
   endGame(thirdThrow: boolean): void {
     this.game.gameover = true;
     this.calculateFrameScore(thirdThrow);
+    this.game.pinCount = 0;
     console.log("Game over")
   }
 
@@ -268,4 +269,8 @@ export class GameComponent implements OnInit {
       return 0;
     }
   }
+
+  newGame():void{
+    location.reload();
+}
 }
